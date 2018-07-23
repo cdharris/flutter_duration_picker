@@ -196,6 +196,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     _theta = _thetaTween.animate(new CurvedAnimation(
         parent: _thetaController, curve: Curves.fastOutSlowIn))
       ..addListener(() => setState(() {}));
+    _hours = widget.duration.inHours;
   }
 
   ThemeData themeData;
