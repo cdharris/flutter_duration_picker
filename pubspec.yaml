@@ -1,6 +1,6 @@
 name: flutter_duration_picker
 description: A widget for picking durations, inspired by Material Time Picker.
-version: 1.0.1
+version: 1.0.2
 author: Chris Harris <c@harrischris.com>
 homepage: https://github.com/cdharris/flutter_duration_picker
 
