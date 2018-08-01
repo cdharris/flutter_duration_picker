@@ -1,3 +1,6 @@
+## [1.0.3] - Aug 01, 2018
+
+* Fixed bug returning false from void function
 
 ## [1.0.2] - Jul 25, 2018
 

@@ -91,9 +91,8 @@ class _DialPainter extends CustomPainter {
     TextPainter textDurationValuePainter = new TextPainter(
         textAlign: TextAlign.center,
         text: new TextSpan(
-            text: '${hours}${(pctTheta*60).round()}',
-            style: Theme
-                .of(context)
+            text: '${hours}${(pctTheta * 60).round()}',
+            style: Theme.of(context)
                 .textTheme
                 .display3
                 .copyWith(fontSize: size.shortestSide * 0.15)),
@@ -278,7 +277,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
       if (angle >= _kCircleTop &&
           _theta.value <= _kCircleTop &&
           _theta.value >= 0.1 && // to allow the radians sign change at 15mins.
-          _hours == 0) return false;
+          _hours == 0) return;
 
       _thetaTween
         ..begin = angle
