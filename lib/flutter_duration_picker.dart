@@ -575,7 +575,7 @@ Future<Duration> showDurationPicker(
   return await showDialog<Duration>(
     context: context,
     builder: (BuildContext context) =>
-        new _DurationPickerDialog(initialTime: initialTime),
+        new _DurationPickerDialog(initialTime: initialTime, snapToMins: snapToMins),
   );
 }
 
