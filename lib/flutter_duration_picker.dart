@@ -88,10 +88,12 @@ class _DialPainter extends CustomPainter {
 
     // Draw the Text in the center of the circle which displays hours and mins
     String hours = (multiplier == 0) ? '' : "${multiplier}h ";
+    int minutes = (pctTheta * 60).round();
+    minutes = minutes == 60 ? 0 : minutes;
     TextPainter textDurationValuePainter = new TextPainter(
         textAlign: TextAlign.center,
         text: new TextSpan(
-            text: '${hours}${(pctTheta * 60).round()}',
+            text: '${hours}${minutes > 0 ? minutes : ""}',
             style: Theme.of(context)
                 .textTheme
                 .display3
@@ -195,6 +197,12 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     _theta = _thetaTween.animate(new CurvedAnimation(
         parent: _thetaController, curve: Curves.fastOutSlowIn))
       ..addListener(() => setState(() {}));
+    _thetaController.addStatusListener((status) {
+      if (status == AnimationStatus.completed && _hours != _snappedHours) {
+        _hours = _snappedHours;
+        setState(() {});
+      }
+    });
     _hours = widget.duration.inHours;
   }
 
@@ -223,6 +231,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
 
   double _pct = 0.0;
   int _hours = 0;
+  int _snappedHours = 0;
   bool _dragging = false;
 
   static double _nearest(double target, double a, double b) {
@@ -249,13 +258,22 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
   }
 
   Duration _getTimeForTheta(double theta) {
-    final double fractionalRotation = (0.25 - (theta / _kTwoPi));
+    double fractionalRotation = (0.25 - (theta / _kTwoPi));
+    fractionalRotation = fractionalRotation < 0
+        ? 1 - fractionalRotation.abs()
+        : fractionalRotation;
     int mins = (fractionalRotation * 60).round();
     if (widget.snapToMins != null) {
       mins = ((mins / widget.snapToMins).round() * widget.snapToMins).round();
     }
-    if (mins == 60) mins = 0;
-    return new Duration(hours: _hours, minutes: mins);
+    if (mins == 60) {
+      _snappedHours = _hours + 1;
+      mins = 0;
+      return new Duration(hours: _snappedHours, minutes: mins);
+    } else {
+      _snappedHours = _hours;
+      return new Duration(hours: _hours, minutes: mins);
+    }
   }
 
   Duration _notifyOnChangedIfNeeded() {
@@ -331,6 +349,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     _dragging = false;
     _position = null;
     _center = null;
+    //_notifyOnChangedIfNeeded();
     _animateTo(_getThetaForDuration(widget.duration));
   }
 
