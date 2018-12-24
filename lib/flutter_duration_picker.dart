@@ -73,7 +73,7 @@ class _DialPainter extends CustomPainter {
 
     // Draw the inner background circle
     canvas.drawCircle(
-        centerPoint, radius * 0.88, new Paint()..color = Colors.white);
+        centerPoint, radius * 0.88, new Paint()..color = Theme.of(context).canvasColor);
 
     // Get the offset point for an angle value of theta, and a distance of _radius
     Offset getOffsetForTheta(double theta, double _radius) {
