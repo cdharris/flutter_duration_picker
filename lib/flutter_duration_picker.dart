@@ -518,13 +518,17 @@ class _DurationPickerDialog extends StatefulWidget {
   ///
   /// [initialTime] must not be null.
   const _DurationPickerDialog(
-      {Key key, @required this.initialTime, this.snapToMins})
+      {Key key,
+      @required this.initialTime,
+      this.snapToMins,
+      this.boxDecoration})
       : assert(initialTime != null),
         super(key: key);
 
   /// The duration initially selected when the dialog is shown.
   final Duration initialTime;
   final double snapToMins;
+  final BoxDecoration boxDecoration;
 
   @override
   _DurationPickerDialogState createState() => new _DurationPickerDialogState();
@@ -567,6 +571,9 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
     assert(debugCheckHasMediaQuery(context));
     final ThemeData theme = Theme.of(context);
 
+    final BoxDecoration boxDecoration = widget.boxDecoration ??
+        BoxDecoration(color: theme.dialogBackgroundColor);
+
     final Widget picker = new Padding(
         padding: const EdgeInsets.all(16.0),
         child: new AspectRatio(
@@ -589,9 +596,7 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
     final Dialog dialog = new Dialog(child: new OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
       final Widget pickerAndActions = new Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: theme.dialogBackgroundColor),
+        decoration: boxDecoration,
         child: new Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -662,7 +667,8 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
 Future<Duration> showDurationPicker(
     {@required BuildContext context,
     @required Duration initialTime,
-    double snapToMins}) async {
+    double snapToMins,
+    BoxDecoration decoration}) async {
   assert(context != null);
   assert(initialTime != null);
 
