@@ -588,6 +588,7 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
     final Dialog dialog = new Dialog(child: new OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
       final Widget pickerAndActions = new Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
         color: theme.dialogBackgroundColor,
         child: new Column(
           mainAxisSize: MainAxisSize.min,
