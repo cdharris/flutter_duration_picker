@@ -74,8 +74,8 @@ class _DialPainter extends CustomPainter {
     }
 
     // Draw the inner background circle
-    canvas.drawCircle(
-        centerPoint, radius * 0.88, new Paint()..color = Theme.of(context).canvasColor);
+    canvas.drawCircle(centerPoint, radius * 0.88,
+        new Paint()..color = Theme.of(context).canvasColor);
 
     // Get the offset point for an angle value of theta, and a distance of _radius
     Offset getOffsetForTheta(double theta, double _radius) {
@@ -185,6 +185,7 @@ class _Dial extends StatefulWidget {
 
   /// The resolution of mins of the dial, i.e. if snapToMins = 5.0, only durations of 5min intervals will be selectable.
   final double snapToMins;
+
   @override
   _DialState createState() => new _DialState();
 }
@@ -588,14 +589,14 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
     final Dialog dialog = new Dialog(child: new OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
       final Widget pickerAndActions = new Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-        color: theme.dialogBackgroundColor,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: theme.dialogBackgroundColor),
         child: new Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            new Expanded(
-                child:
-                    picker), // picker grows and shrinks with the available space
+            new Expanded(child: picker),
+            // picker grows and shrinks with the available space
             actions,
           ],
         ),
@@ -667,8 +668,8 @@ Future<Duration> showDurationPicker(
 
   return await showDialog<Duration>(
     context: context,
-    builder: (BuildContext context) =>
-        new _DurationPickerDialog(initialTime: initialTime, snapToMins: snapToMins),
+    builder: (BuildContext context) => new _DurationPickerDialog(
+        initialTime: initialTime, snapToMins: snapToMins),
   );
 }
 
