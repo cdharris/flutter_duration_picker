@@ -74,8 +74,8 @@ class _DialPainter extends CustomPainter {
     }
 
     // Draw the inner background circle
-    canvas.drawCircle(
-        centerPoint, radius * 0.88, new Paint()..color = Theme.of(context).canvasColor);
+    canvas.drawCircle(centerPoint, radius * 0.88,
+        new Paint()..color = Theme.of(context).canvasColor);
 
     // Get the offset point for an angle value of theta, and a distance of _radius
     Offset getOffsetForTheta(double theta, double _radius) {
@@ -185,6 +185,7 @@ class _Dial extends StatefulWidget {
 
   /// The resolution of mins of the dial, i.e. if snapToMins = 5.0, only durations of 5min intervals will be selectable.
   final double snapToMins;
+
   @override
   _DialState createState() => new _DialState();
 }
@@ -587,48 +588,47 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
 
     final Dialog dialog = new Dialog(child: new OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
-          final Widget pickerAndActions = new Container(
-            color: theme.dialogBackgroundColor,
-            child: new Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new Expanded(
-                    child:
-                    picker), // picker grows and shrinks with the available space
-                actions,
-              ],
-            ),
-          );
+      final Widget pickerAndActions = new Container(
+        color: Colors.red,
+        child: new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new Expanded(child: picker),
+            // picker grows and shrinks with the available space
+            actions,
+          ],
+        ),
+      );
 
-          assert(orientation != null);
-          switch (orientation) {
-            case Orientation.portrait:
-              return new SizedBox(
-                  width: _kDurationPickerWidthPortrait,
-                  height: _kDurationPickerHeightPortrait,
-                  child: new Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        new Expanded(
-                          child: pickerAndActions,
-                        ),
-                      ]));
-            case Orientation.landscape:
-              return new SizedBox(
-                  width: _kDurationPickerWidthLandscape,
-                  height: _kDurationPickerHeightLandscape,
-                  child: new Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        new Flexible(
-                          child: pickerAndActions,
-                        ),
-                      ]));
-          }
-          return null;
-        }));
+      assert(orientation != null);
+      switch (orientation) {
+        case Orientation.portrait:
+          return new SizedBox(
+              width: _kDurationPickerWidthPortrait,
+              height: _kDurationPickerHeightPortrait,
+              child: new Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    new Expanded(
+                      child: pickerAndActions,
+                    ),
+                  ]));
+        case Orientation.landscape:
+          return new SizedBox(
+              width: _kDurationPickerWidthLandscape,
+              height: _kDurationPickerHeightLandscape,
+              child: new Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    new Flexible(
+                      child: pickerAndActions,
+                    ),
+                  ]));
+      }
+      return null;
+    }));
 
     return new Theme(
       data: theme.copyWith(
@@ -657,17 +657,21 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
 ///   context: context,
 /// );
 /// ```
-Future<Duration> showDurationPicker(
-  {@required BuildContext context,
+Future<Duration> showDurationPicker({
+  @required BuildContext context,
   @required Duration initialTime,
-  double snapToMins}) async {
+  double snapToMins,
+  BoxDecoration decoration,
+}) async {
   assert(context != null);
   assert(initialTime != null);
 
   return await showDialog<Duration>(
     context: context,
-    builder: (BuildContext context) =>
-    new _DurationPickerDialog(initialTime: initialTime, snapToMins: snapToMins),
+    builder: (BuildContext context) => new _DurationPickerDialog(
+      initialTime: initialTime,
+      snapToMins: snapToMins,
+    ),
   );
 }
 
@@ -678,17 +682,20 @@ class DurationPicker extends StatelessWidget {
 
   final double width;
   final double height;
+  final BoxDecoration boxDecoration;
 
   DurationPicker(
-    {this.duration = const Duration(minutes: 0),
-    @required this.onChange,
-    this.snapToMins,
-    this.width,
-    this.height});
+      {this.duration = const Duration(minutes: 0),
+      @required this.onChange,
+      this.snapToMins,
+      this.width,
+      this.height,
+      this.boxDecoration});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+        decoration: boxDecoration,
         width: width ?? _kDurationPickerWidthPortrait / 1.5,
         height: height ?? _kDurationPickerHeightPortrait / 1.5,
         child: Column(
