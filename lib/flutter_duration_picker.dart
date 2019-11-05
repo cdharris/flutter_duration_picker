@@ -152,7 +152,7 @@ class _DialPainter extends CustomPainter {
 
       for (TextPainter label in labels) {
         final Offset labelOffset =
-        new Offset(-label.width / 2.0, -label.height / 2.0);
+            new Offset(-label.width / 2.0, -label.height / 2.0);
 
         label.paint(
             canvas, getOffsetForTheta(labelTheta, radius - 40.0) + labelOffset);
@@ -175,9 +175,9 @@ class _DialPainter extends CustomPainter {
 
 class _Dial extends StatefulWidget {
   const _Dial(
-    {@required this.duration,
-    @required this.onChanged,
-    this.snapToMins = 1.0})
+      {@required this.duration,
+      @required this.onChanged,
+      this.snapToMins = 1.0})
       : assert(duration != null);
 
   final Duration duration;
@@ -199,7 +199,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
       vsync: this,
     );
     _thetaTween =
-    new Tween<double>(begin: _getThetaForDuration(widget.duration));
+        new Tween<double>(begin: _getThetaForDuration(widget.duration));
     _theta = _thetaTween.animate(new CurvedAnimation(
         parent: _thetaController, curve: Curves.fastOutSlowIn))
       ..addListener(() => setState(() {}));
@@ -217,7 +217,6 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     _turningAngle = _kPiByTwo - widget.duration.inMinutes / 60.0 * _kTwoPi;
     _hours = _hourHand(_turningAngle);
     _minutes = _minuteHand(_turningAngle);
-
   }
 
   ThemeData themeData;
@@ -245,11 +244,11 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
 
   double _pct = 0.0;
   int _hours = 0;
+
 //  int _snappedHours = 0;
   bool _dragging = false;
   int _minutes = 0;
   double _turningAngle = 0.0;
-
 
   static double _nearest(double target, double a, double b) {
     return ((target - a).abs() < (target - b).abs()) ? a : b;
@@ -258,7 +257,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
   void _animateTo(double targetTheta) {
     final double currentTheta = _theta.value;
     double beginTheta =
-    _nearest(targetTheta, currentTheta, currentTheta + _kTwoPi);
+        _nearest(targetTheta, currentTheta, currentTheta + _kTwoPi);
     beginTheta = _nearest(targetTheta, beginTheta, currentTheta - _kTwoPi);
     _thetaTween
       ..begin = beginTheta
@@ -383,7 +382,8 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
   }
 
   Duration _minutesToDuration(minutes) {
-    return Duration(hours: (minutes ~/ 60).toInt(), minutes: (minutes % 60.0).toInt());
+    return Duration(
+        hours: (minutes ~/ 60).toInt(), minutes: (minutes % 60.0).toInt());
   }
 
   double _angleToMinutes(double angle) {
@@ -409,8 +409,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     // From negative to positive (in mathematical COS)
     else if (newTheta < 0.5 * math.pi && oldTheta > 1.5 * math.pi) {
       _turningAngle = _turningAngle + ((_kTwoPi - oldTheta) + newTheta);
-    }
-    else {
+    } else {
       _turningAngle = _turningAngle + (newTheta - oldTheta);
     }
   }
@@ -517,12 +516,12 @@ class _DurationPickerDialog extends StatefulWidget {
   /// Creates a duration picker.
   ///
   /// [initialTime] must not be null.
-  const _DurationPickerDialog(
-      {Key key,
-      @required this.initialTime,
-      this.snapToMins,
-      this.boxDecoration})
-      : assert(initialTime != null),
+  const _DurationPickerDialog({
+    Key key,
+    @required this.initialTime,
+    this.snapToMins,
+    this.boxDecoration,
+  })  : assert(initialTime != null),
         super(key: key);
 
   /// The duration initially selected when the dialog is shown.
@@ -570,7 +569,6 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     final ThemeData theme = Theme.of(context);
-
     final BoxDecoration boxDecoration = widget.boxDecoration ??
         BoxDecoration(color: theme.dialogBackgroundColor);
 
@@ -586,12 +584,12 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
 
     final Widget actions = new ButtonTheme.bar(
         child: new ButtonBar(children: <Widget>[
-          new FlatButton(
-              child: new Text(localizations.cancelButtonLabel),
-              onPressed: _handleCancel),
-          new FlatButton(
-              child: new Text(localizations.okButtonLabel), onPressed: _handleOk),
-        ]));
+      new FlatButton(
+          child: new Text(localizations.cancelButtonLabel),
+          onPressed: _handleCancel),
+      new FlatButton(
+          child: new Text(localizations.okButtonLabel), onPressed: _handleOk),
+    ]));
 
     final Dialog dialog = new Dialog(child: new OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
@@ -668,7 +666,7 @@ Future<Duration> showDurationPicker(
     {@required BuildContext context,
     @required Duration initialTime,
     double snapToMins,
-    BoxDecoration decoration}) async {
+    BoxDecoration boxDecoration}) async {
   assert(context != null);
   assert(initialTime != null);
 
@@ -677,7 +675,7 @@ Future<Duration> showDurationPicker(
     builder: (BuildContext context) => new _DurationPickerDialog(
       initialTime: initialTime,
       snapToMins: snapToMins,
-      boxDecoration: decoration,
+      boxDecoration: boxDecoration,
     ),
   );
 }
