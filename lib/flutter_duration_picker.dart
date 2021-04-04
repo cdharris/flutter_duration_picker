@@ -101,7 +101,7 @@ class _DialPainter extends CustomPainter {
             text: '${hours}${minutes}',
             style: Theme.of(context)
                 .textTheme
-                .display3
+                .headline2
                 .copyWith(fontSize: size.shortestSide * 0.15)),
         textDirection: TextDirection.ltr)
       ..layout();
@@ -114,7 +114,7 @@ class _DialPainter extends CustomPainter {
         textAlign: TextAlign.center,
         text: new TextSpan(
             text: 'min.', //th: ${theta}',
-            style: Theme.of(context).textTheme.body1),
+            style: Theme.of(context).textTheme.bodyText2),
         textDirection: TextDirection.ltr)
       ..layout();
     textMinPainter.paint(
@@ -437,7 +437,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
   }
 
   List<TextPainter> _buildMinutes(TextTheme textTheme) {
-    final TextStyle style = textTheme.subhead;
+    final TextStyle style = textTheme.subtitle1;
 
     const List<Duration> _minuteMarkerValues = const <Duration>[
       const Duration(hours: 0, minutes: 0),
@@ -582,14 +582,16 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
               snapToMins: widget.snapToMins,
             )));
 
-    final Widget actions = new ButtonTheme.bar(
+    final Widget actions = new ButtonBarTheme(
+        data: ButtonBarTheme.of(context),
         child: new ButtonBar(children: <Widget>[
-      new FlatButton(
-          child: new Text(localizations.cancelButtonLabel),
-          onPressed: _handleCancel),
-      new FlatButton(
-          child: new Text(localizations.okButtonLabel), onPressed: _handleOk),
-    ]));
+          new TextButton(
+              child: new Text(localizations.cancelButtonLabel),
+              onPressed: _handleCancel),
+          new TextButton(
+              child: new Text(localizations.okButtonLabel),
+              onPressed: _handleOk),
+        ]));
 
     final Dialog dialog = new Dialog(child: new OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
