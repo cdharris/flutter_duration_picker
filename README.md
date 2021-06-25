@@ -2,6 +2,8 @@
 
 A little widget for picking durations. Heavily inspired from the Material Design time picker widget.
 
+**This repo is unmaintained, please check out the fork here: https://github.com/juliansteenbakker/duration_picker**
+
 <img src="https://raw.githubusercontent.com/cdharris/flutter_duration_picker/master/example.gif" height="480px" >
 
 ## Example Usage:
