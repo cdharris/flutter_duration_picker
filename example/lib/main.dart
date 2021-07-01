@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     context: context,
                     initialTime: new Duration(minutes: 30),
                   );
-                  Scaffold.of(context).showSnackBar(new SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                       content: new Text("Chose duration: $resultingDuration")));
                 },
                 tooltip: 'Popup Duration Picker',
