@@ -576,7 +576,8 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
               snapToMins: widget.snapToMins,
             )));
 
-    final Widget actions = new ButtonTheme.bar(
+    final Widget actions = new ButtonBarTheme(
+        data: ButtonBarTheme.of(context),
         child: new ButtonBar(children: <Widget>[
           new FlatButton(
               child: new Text(localizations.cancelButtonLabel),
