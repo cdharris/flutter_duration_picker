@@ -27,24 +27,24 @@ const double _kCircleTop = _kPiByTwo;
 
 class _DialPainter extends CustomPainter {
   const _DialPainter({
-    @required this.context,
-    @required this.labels,
-    @required this.backgroundColor,
-    @required this.accentColor,
-    @required this.theta,
-    @required this.textDirection,
-    @required this.selectedValue,
-    @required this.pct,
-    @required this.multiplier,
-    @required this.minuteHand,
+    required this.context,
+    required this.labels,
+    required this.backgroundColor,
+    required this.accentColor,
+    required this.theta,
+    required this.textDirection,
+    required this.selectedValue,
+    required this.pct,
+    required this.multiplier,
+    required this.minuteHand,
   });
 
   final List<TextPainter> labels;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final Color accentColor;
   final double theta;
   final TextDirection textDirection;
-  final int selectedValue;
+  final int? selectedValue;
   final BuildContext context;
 
   final double pct;
@@ -65,7 +65,7 @@ class _DialPainter extends CustomPainter {
 
     // Draw the background outer ring
     canvas.drawCircle(
-        centerPoint, radius, new Paint()..color = backgroundColor);
+        centerPoint, radius, new Paint()..color = backgroundColor!);
 
     // Draw a translucent circle for every hour
     for (int i = 0; i < multiplier; i = i + 1) {
@@ -101,7 +101,7 @@ class _DialPainter extends CustomPainter {
             text: '${hours}${minutes}',
             style: Theme.of(context)
                 .textTheme
-                .headline2
+                .headline2!
                 .copyWith(fontSize: size.shortestSide * 0.15)),
         textDirection: TextDirection.ltr)
       ..layout();
@@ -175,8 +175,8 @@ class _DialPainter extends CustomPainter {
 
 class _Dial extends StatefulWidget {
   const _Dial(
-      {@required this.duration,
-      @required this.onChanged,
+      {required this.duration,
+      required this.onChanged,
       this.snapToMins = 1.0})
       : assert(duration != null);
 
@@ -184,7 +184,7 @@ class _Dial extends StatefulWidget {
   final ValueChanged<Duration> onChanged;
 
   /// The resolution of mins of the dial, i.e. if snapToMins = 5.0, only durations of 5min intervals will be selectable.
-  final double snapToMins;
+  final double? snapToMins;
 
   @override
   _DialState createState() => new _DialState();
@@ -200,10 +200,10 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     );
     _thetaTween =
         new Tween<double>(begin: _getThetaForDuration(widget.duration));
-    _theta = _thetaTween.animate(new CurvedAnimation(
-        parent: _thetaController, curve: Curves.fastOutSlowIn))
+    _theta = _thetaTween!.animate(new CurvedAnimation(
+        parent: _thetaController!, curve: Curves.fastOutSlowIn))
       ..addListener(() => setState(() {}));
-    _thetaController.addStatusListener((status) {
+    _thetaController!.addStatusListener((status) {
 //      if (status == AnimationStatus.completed && _hours != _snappedHours) {
 //        _hours = _snappedHours;
       if (status == AnimationStatus.completed) {
@@ -219,9 +219,9 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     _minutes = _minuteHand(_turningAngle);
   }
 
-  ThemeData themeData;
-  MaterialLocalizations localizations;
-  MediaQueryData media;
+  late ThemeData themeData;
+  MaterialLocalizations? localizations;
+  MediaQueryData? media;
 
   @override
   void didChangeDependencies() {
@@ -234,13 +234,13 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _thetaController.dispose();
+    _thetaController!.dispose();
     super.dispose();
   }
 
-  Tween<double> _thetaTween;
-  Animation<double> _theta;
-  AnimationController _thetaController;
+  Tween<double>? _thetaTween;
+  late Animation<double> _theta;
+  AnimationController? _thetaController;
 
   double _pct = 0.0;
   int _hours = 0;
@@ -310,7 +310,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
 
   void _updateThetaForPan() {
     setState(() {
-      final Offset offset = _position - _center;
+      final Offset offset = _position! - _center!;
       final double angle =
           (math.atan2(offset.dx, offset.dy) - _kPiByTwo) % _kTwoPi;
 
@@ -327,13 +327,13 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     });
   }
 
-  Offset _position;
-  Offset _center;
+  Offset? _position;
+  Offset? _center;
 
   void _handlePanStart(DragStartDetails details) {
     assert(!_dragging);
     _dragging = true;
-    final RenderBox box = context.findRenderObject();
+    final RenderBox box = context.findRenderObject() as RenderBox;
     _position = box.globalToLocal(details.globalPosition);
     _center = box.size.center(Offset.zero);
 
@@ -424,7 +424,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
   }
 
   void _handleTapUp(TapUpDetails details) {
-    final RenderBox box = context.findRenderObject();
+    final RenderBox box = context.findRenderObject() as RenderBox;
     _position = box.globalToLocal(details.globalPosition);
     _center = box.size.center(Offset.zero);
     _updateThetaForPan();
@@ -437,7 +437,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
   }
 
   List<TextPainter> _buildMinutes(TextTheme textTheme) {
-    final TextStyle style = textTheme.subtitle1;
+    final TextStyle? style = textTheme.subtitle1;
 
     const List<Duration> _minuteMarkerValues = const <Duration>[
       const Duration(hours: 0, minutes: 0),
@@ -467,7 +467,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor;
+    Color? backgroundColor;
     switch (themeData.brightness) {
       case Brightness.light:
         backgroundColor = Colors.grey[200];
@@ -479,7 +479,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
 
     final ThemeData theme = Theme.of(context);
 
-    int selectedDialValue;
+    int? selectedDialValue;
     _hours = _hourHand(_turningAngle);
     _minutes = _minuteHand(_turningAngle);
 
@@ -517,8 +517,8 @@ class _DurationPickerDialog extends StatefulWidget {
   ///
   /// [initialTime] must not be null.
   const _DurationPickerDialog({
-    Key key,
-    @required this.initialTime,
+    Key? key,
+    required this.initialTime,
     this.snapToMins,
     this.boxDecoration,
   })  : assert(initialTime != null),
@@ -526,8 +526,8 @@ class _DurationPickerDialog extends StatefulWidget {
 
   /// The duration initially selected when the dialog is shown.
   final Duration initialTime;
-  final double snapToMins;
-  final BoxDecoration boxDecoration;
+  final double? snapToMins;
+  final BoxDecoration? boxDecoration;
 
   @override
   _DurationPickerDialogState createState() => new _DurationPickerDialogState();
@@ -546,10 +546,10 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
     localizations = MaterialLocalizations.of(context);
   }
 
-  Duration get selectedDuration => _selectedDuration;
-  Duration _selectedDuration;
+  Duration? get selectedDuration => _selectedDuration;
+  Duration? _selectedDuration;
 
-  MaterialLocalizations localizations;
+  late MaterialLocalizations localizations;
 
   void _handleTimeChanged(Duration value) {
     setState(() {
@@ -577,7 +577,7 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
         child: new AspectRatio(
             aspectRatio: 1.0,
             child: new _Dial(
-              duration: _selectedDuration,
+              duration: _selectedDuration!,
               onChanged: _handleTimeChanged,
               snapToMins: widget.snapToMins,
             )));
@@ -664,11 +664,11 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
 ///   context: context,
 /// );
 /// ```
-Future<Duration> showDurationPicker(
-    {@required BuildContext context,
-    @required Duration initialTime,
-    double snapToMins,
-    BoxDecoration boxDecoration}) async {
+Future<Duration?> showDurationPicker(
+    {required BuildContext context,
+    required Duration initialTime,
+    double? snapToMins,
+    BoxDecoration? boxDecoration}) async {
   assert(context != null);
   assert(initialTime != null);
 
@@ -685,14 +685,14 @@ Future<Duration> showDurationPicker(
 class DurationPicker extends StatelessWidget {
   final Duration duration;
   final ValueChanged<Duration> onChange;
-  final double snapToMins;
+  final double? snapToMins;
 
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
 
   DurationPicker(
       {this.duration = const Duration(minutes: 0),
-      @required this.onChange,
+      required this.onChange,
       this.snapToMins,
       this.width,
       this.height});
