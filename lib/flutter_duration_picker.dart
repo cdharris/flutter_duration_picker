@@ -259,10 +259,10 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
     double beginTheta =
         _nearest(targetTheta, currentTheta, currentTheta + _kTwoPi);
     beginTheta = _nearest(targetTheta, beginTheta, currentTheta - _kTwoPi);
-    _thetaTween
+    _thetaTween!
       ..begin = beginTheta
       ..end = targetTheta;
-    _thetaController
+    _thetaController!
       ..value = 0.0
       ..forward();
   }
@@ -321,7 +321,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
           _theta.value >= 0.1 && // to allow the radians sign change at 15mins.
           _hours == 0) return;
 
-      _thetaTween
+      _thetaTween!
         ..begin = angle
         ..end = angle;
     });
@@ -343,7 +343,7 @@ class _DialState extends State<_Dial> with SingleTickerProviderStateMixin {
 
   void _handlePanUpdate(DragUpdateDetails details) {
     double oldTheta = _theta.value;
-    _position += details.delta;
+    _position = _position! + details.delta;
     _updateThetaForPan();
     double newTheta = _theta.value;
 
@@ -634,7 +634,6 @@ class _DurationPickerDialogState extends State<_DurationPickerDialog> {
                     ),
                   ]));
       }
-      return null;
     }));
 
     return new Theme(
