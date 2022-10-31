@@ -1,5 +1,5 @@
+import 'package:duration_picker/flutter_duration_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_duration_picker/flutter_duration_picker.dart';
 
 void main() => runApp(new MyApp());
 
@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _MyHomePageState createState() => new _MyHomePageState();
@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.title),
+        title: new Text(widget.title!),
       ),
       body: new Center(
         child: new Column(
@@ -51,11 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: Builder(
           builder: (BuildContext context) => new FloatingActionButton(
                 onPressed: () async {
-                  Duration resultingDuration = await showDurationPicker(
+                  Duration? resultingDuration = await showDurationPicker(
                     context: context,
                     initialTime: new Duration(minutes: 30),
                   );
-                  Scaffold.of(context).showSnackBar(new SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                       content: new Text("Chose duration: $resultingDuration")));
                 },
                 tooltip: 'Popup Duration Picker',
